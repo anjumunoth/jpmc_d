@@ -1,0 +1,431 @@
+Why nosql?
+-- Structured data, unstructured data(images, videos, audio), semi structured data
+-- no schema attached (flexible schema)
+RDBMS -- rigid schema 
+No 2 rows have to have the same structure
+-- Performance
+-- Scalability -- horizontal scaling is built it
+-- Failure scenarios: Automatic failover is built in
+-- Replication is built in 
+-- Sharding / partitioning of data -- built in ; simple process
+-- ACID; transaction -- RDBMS -- Not all acid compliant 
+-- CAP -- At a particular point, only 2 of the 3 principles can be adhered to
+
+-- Volume of data, Velocity of data, variety of data
+-- Tuneable consistency
+-- Cloud AWS, Azure, GCP -- maintain hardware, pay as u use, availability, anytime, anywhere, no need to maintain 
+-- Major nosqldb have their cloud version
+-- Cloud databases are also present -- dynamodb
+
+Mongodb : Standalone server : CA
+Replica set -- AP; eventual consistency
+
+
+
+
+RDBMS:
+Images, Videos
+BLOB, CLOB
+
+Performance  -Not efficient 
+
+Arnab -- trekking, football
+Vikram -- reading technical articles, cricket, chess
+Riya -- listening to music, watching OTT, reading novels, travelling
+X -- no hobbies
+
+create table employees(
+empId int ,
+empName varchar2(20),
+hobbyId,
+pk(empId,hobbyId)
+
+)
+
+create table hobby
+(hobbyId, description)
+
+
+
+
+-- different languages and cultures
+
+
+RDBMS
+Vertical scaling -- improve the CPU/memory of the single server
+1. properitary hardware
+Nosql
+Horizontal scaling
+Increase the number of servers
+
+1. Commodity hardwares
+
+Amazon 
+
+
+On a normal day traffic -- 10L users per day
+Amazon Prime day sale -- 100L users per day
+One week after the sale -- 10L users per day
+
+Vertical scaling : 
+
+On a normal day traffic -- Single server Memory 10tb/
+Amazon Prime day sale -- Single server Memory 100tb
+One week after the sale -- Single server Memory 10tb
+
+Disadv:
+Difficult to scale down;
+Cost -- Costly
+Failure scenario: Server down -- app will fail
+
+Horizontal scaling:
+Number of servers (commodity hardwares)
+On a normal day traffic -- 10 servers/
+Amazon Prime day sale -- 100servers
+One week after the sale -- 10 servers
+
+Adv:
+Easier to scale up and scale down
+Cost -- Cost effective
+Failures: Some of servers are down: app be running (can be slow)
+Availability
+
+Disadv:
+Consistency -- eventual consistency
+
+RDBMS -- default -- vertical scaling ; horizontal scaling -- complex configuration
+
+Replication -- same data in different physical servers
+Master- slave architecture ; Ring architecture 
+Availabilty
+
+
+Sharding -- breaking up of data and store it in different servers
+Data -- huge 
+Performance of writes/reads -- faster, organised  
+
+
+4 categories of no sql db
+1. Document -- Mongodb
+2. Column based -- Cassandra
+3. Graph based -- Neo4j
+4. key value based -- Couchbase,Redis
+
+
+
+Mongodb -- data is stored in json/bson object format ; row/record -- document
+Cassandra -- (Partition key and sort key )-- Primary key 
+Graph Based -- Network; edges and relationships
+Edges -- Entities -- books info
+relationship -- 2 entities ; can have also attributes(data)
+Key value based : key ; record of data
+
+RDBMS:
+3 tables:
+Person
+Book
+PersonBook -- 
+
+Neo4j:
+2 tables and one realtionship
+Person
+Book
+Realtionship buys: 
+
+
+Dynamodb:
+
+Highly scalable 
+Fully managed
+key value based and documnet based
+Ideal for Low latency 
+Built on AWS platform
+
+
+Ideal Database :
+1. High Availability -- Replication of data
+
+2. Strong consistency -- Data should be completed synced
+3. Low latency
+Latency -- time taken for data retreival 
+4. Partition tolerant -- If one node fails, it should not affect the data availability/consistency
+5. Versions of database : Backward compatibility; upgradation; version management is automatic
+6. Server maintanence : Server is up/down -- Happen automatically; No server
+7. Partitioning of data -- managed ; no hot partitions; data is balanced among the various partitions
+8. Back up and recovery : 
+9. How is the data stored physically
+10. Read and writes have to happen really fast with huge amounts of data; data storage -- possible 
+11. Encryption at rest, transit
+12. Authentication and authorisation
+
+Dynamodb
+1. Highly scalable -- trillions of request per data
+petabytes of storage
+10 millions of reads/writes per second
+2. DAX -- in memory cache -- faster read performance ; increase the performance by 10 times
+3. Replication -- global tables ; same data is available/replicated across multiple AWS regions 
+4. single digit millisecond reteival of data 
+5. Streams -- change in data; notify the applications of data 
+6. Serverless ; -- patch, upgradation, maintanence
+7. Partition of data -- fully managed by Dynamodb 
+8. Scalabilty -- 2 capacity modes
+On demand 
+Provisioned mode
+9. Strong , eventual , transactional consistency
+10. Auto scaling
+11. back up and recovery ; incrementan backup; recovery upto last 35 days
+12. Availability -- Db is in the cloud ; aws 99.99? availability sla
+13. Triggers: Run custom functions when item changes
+14. All data are encrypted -- 3 types of encryption
+15. AWS IAM roles; 
+
+
+Partitioning in Dynamodb:
+partition key -- sent to hashing algorithm
+based on hashed value -- they will be stored physically in a particular partition
+
+
+Internally partitions(memory locations) will be created
+data which share the same partition key will be stored in the same partition
+In a same partition , there can be items belonging to the different partition key
+
+Abstractions: Number of current partition; which data is stored in which partition; Data movement between the partitions; data balancing; 
+
+AWS regions: Multiple regions
+
+data availibility:
+Each region -- multiple availabilty zones:
+data is going to replicated across the various availability zones within the same region
+Even if one zone is down , data is available in other zones -- Available
+Replication -- internally managed by AWS
+
+Each table is local to that region where its created
+
+Global tables -- table can be replicated to various selected regions
+
+
+Capacity modes:
+1. On demand -- traffic is unpredictable
+2. Provisioned -- amount of expected traffic
+2a Auto scale on
+2b Auto scale off
+
+Read capacity units RCU
+Write capacity units WCU
+
+
+RCU:
+Eventual consistency -- Read data upto 4kb in size -- 0.5 RCU
+Strong consistency -- Read data upto 4kb in size -- 1 RCU
+transaction consistency -- Read data upto 4kb in size -- 2 RCU
+
+Record -- 3kb size
+query to read the above record : .5 RCU (eventual)
+
+Record -- 6kb size
+query to read the above record : 1 RCU (eventual)(.5*2)
+
+WCU:
+Eventual consistency -- Write data 1kb in size -- 1wCU
+Strong consistency -- write data 1kb in size -- 2 wCU
+
+
+Scenario 1:
+100 guests:
+10 waiters
+
+
+Scenario 2: Open invite in ur office 
+10 guests
+1000 guests 
+
+Minimum number of waiters : 50
+On hold waiters : 50
+
+
+Each item < 4kb
+Scan the table(500 items) and filter the data(200 items)
+
+Number of RCU's consumed : 500 *.5 = 250 RCU
+Not going to 100 rcu (200 *.5)
+
+Provisioned : Specify the number of rcu/wcu
+
+
+Min RCu : 1
+Max Rcu : 100
+Target utilisation : 70%
+
+Auto scaling : based on the demand
+
+1:00 pm : 
+10 reads for 10 items. each item = 4kb;
+Consumed capacity : 5rcu
+Provisioned capacity : 10rcu
+Target utilisation : consumed/provisioned : 50%
+
+1:15 Pm: Spike in traffic:
+100 item reads 
+Auto scaling process has to be kicked in
+
+Cloud watch -- monitor the metrics performance of the data, throughput
+alarm -- to increase(scale up) the RCU
+Provisoned RCU -- scaled up 10 rcu to 72 rcu
+Consumption: 50 rcu
+target utilisation : 70%; 50/x=70
+
+Provisioned
+Adv
+1.
+	Fixed costs
+2. Reserverd capacity -- buy in advance the min requirements(monthly basis)-- discounts
+Disadv
+1. Scalability beyond a point is not possible
+2. Load on the cluster may be inefficient
+3. Pay for unconsumed provisioned units
+
+On demand
+Adv
+1. Pay as per demand 
+2. No fixed cost (variable based on the traffic)
+3. Promise -- single milli second throughput for millions of requests
+Disadv
+1. Cost is unpredictable
+2. Traffic increses within shorter periods of time(less than 30 minutes) -- requests can get throttled
+
+
+CustomerId - Partition key
+OrderId -- Sort key
+
+
+A customer can place many orders
+
+
+
+An order will be placed a single customer
+OrderId --  Partition key
+CustomerId - Sort key
+
+Each partition will have only record
+
+Storage will be inefficient
+Access pattern:
+All the orders placed by a single customer -- scan the entire table - millions of records -- Number of rcu -- huge -- cost huge
+
+Search by order's amount > 5000
+1. Only the table will not be efficient
+2. Create index on order's amount
+
+Sql server -- query -- table; can i query the index -- NO
+Dynamodb -- Query -- target (table /index); order date 
+Index -- projected fields -- other than the primary key
+
+Model the data:
+1. Select the right partition key
+2. Select the indexes to be created (LSI/GSI)
+3. Identify the access patterns/ queries and based on the queries , model the data
+
+Primary Key
+1. simple Partition key
+2. Simple Partition key and single sort key
+3. Multiple fields as partition key -- Yes and No
+No -- physically only filed cab be the partition key
+Yes -- concatenate multiple fields value and store it as the partition key
+ 
+
+select * from tblname where partitionkey starts with "user" and partitionkey ends with "alexdebrie" and sortkey starts with "orders"
+
+
+ [{empId:101,empName:"Asha",salary:1001,deptId:"D1"},
+{empId:102,empName:"Gaurav",salary:2000,deptId:"D1"},
+{empId:103,empName:"Karan",salary:2000,deptId:"D2"},
+{empId:104,empName:"Kishan",salary:3000,deptId:"D1"},
+{empId:105,empName:"Keshav",salary:3500,deptId:"D2"},
+{empId:106,empName:"Pran",salary:4000,deptId:"D3"},
+{empId:107,empName:"Saurav",salary:4000,deptId:"D3"}]
+
+
+deptId - partition key
+empId - sort key
+index on salary
+
+
+salary -- partition key
+empId -- sort key
+
+empId -- partition key;index on salary
+
+
+Access patterns :
+Major queries based on the salary:
+Other queries
+write queries
+
+Not a correct option
+deptId - partition key
+salary - sort key
+
+
+ 
+Good partition key 
+-- Huge number of distinct values
+-- If Sort key is present -- records will be sorted on basis of sort key and stored in the same partition 
+
+
+Table class - 2 options
+1. Standard
+2. Infrequently used
+
+
+List : array of values of different data types
+
+marks: {"L":[10,20,30,40]}
+
+hobbies :{"SS":["h1","h2"]}-- no repetitive values and all values should be of string data type 
+
+
+Scan operation disadv -- scan through the entire operations
+Should be avoided
+1. scan thru various partitions -- more number of i/o operations
+2. Rcu's will be more -- rcu are chargeable -- more the consumption more the charges
+3. Huge volume of data in a single data ;time required is also be more 
+4. 
+
+Scenarios scans are inevitable --
+1. Indexes are not available and query is based on non partition field
+2. Fetch all the records
+3. 
+
+Scan
+select * from employee
+select * from employee where firstName="sara"
+select firstName from employee where firstName="sara"
+select firstName,LastName from employee where firstName="sara"
+
+RCU Consumed -- above 4 queries -- same
+
+
+
+1. select * from songs;Scan operation
+
+2. select * from songs where artist="Argyboots"
+scan operation ; 
+
+3. Get the records of  songs with Id =2
+4. Get the details of songs with Id =2
+5. Get the downloads  of songs with Id =2 sorted in desc order
+6. All the songs downloaded in 2018
+
+Dynamodb -- Not available
+1. Aggregation operations
+2. Join operations
+3. Pattern matching
+4. Order by is only possible on sort key
+5. group by is only possible on partition key
+6. subqueries -- no
+
+
+
+
+
+
